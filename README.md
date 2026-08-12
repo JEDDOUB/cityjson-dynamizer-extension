@@ -1,6 +1,6 @@
 # CityJSON Dynamizer Extension
 
-CityJSON Extension 2.0.0 for representing the scalar and operational core of
+CityJSON Extension 2.0.0 for representing the operational core of
 the [CityGML 3.0 Dynamizer module](https://docs.ogc.org/is/20-010/20-010.html#dynamizer-uml)
 in CityJSON 2.0.
 
