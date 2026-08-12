@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tsml:TimeseriesTVP
+  xmlns:tsml="http://www.opengis.net/timeseriesml/1.2"
+  xmlns:gml="http://www.opengis.net/gml/3.2"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/timeseriesml/1.2 https://schemas.opengis.net/tsml/1.2/timeseriesML.xsd"
+  gml:id="temperature-series-1">
+  <gml:description>Temperature observations copied from FROST Datastream 1 for encoding comparison.</gml:description>
+  <tsml:metadata>
+    <tsml:TimeseriesMetadata>
+      <tsml:temporalExtent>
+        <gml:TimePeriod gml:id="temperature-period-1">
+          <gml:beginPosition>2025-08-27T06:58:22.758Z</gml:beginPosition>
+          <gml:endPosition>2025-08-27T07:13:38.538Z</gml:endPosition>
+        </gml:TimePeriod>
+      </tsml:temporalExtent>
+    </tsml:TimeseriesMetadata>
+  </tsml:metadata>
+  <tsml:defaultPointMetadata>
+    <tsml:PointMetadata>
+      <tsml:uom code="Cel"/>
+      <tsml:interpolationType
+        xlink:href="http://www.opengis.net/def/timeseries/InterpolationCode/Continuous"
+        xlink:title="continuous"/>
+    </tsml:PointMetadata>
+  </tsml:defaultPointMetadata>
+  <tsml:point>
+    <tsml:MeasurementTVP>
+      <tsml:time>2025-08-27T06:58:22.758Z</tsml:time>
+      <tsml:value>19.8</tsml:value>
+    </tsml:MeasurementTVP>
+  </tsml:point>
+  <tsml:point>
+    <tsml:MeasurementTVP>
+      <tsml:time>2025-08-27T07:03:28.020Z</tsml:time>
+      <tsml:value>20.0</tsml:value>
+    </tsml:MeasurementTVP>
+  </tsml:point>
+  <tsml:point>
+    <tsml:MeasurementTVP>
+      <tsml:time>2025-08-27T07:08:33.278Z</tsml:time>
+      <tsml:value>20.1</tsml:value>
+    </tsml:MeasurementTVP>
+  </tsml:point>
+  <tsml:point>
+    <tsml:MeasurementTVP>
+      <tsml:time>2025-08-27T07:13:38.538Z</tsml:time>
+      <tsml:value>20.1</tsml:value>
+    </tsml:MeasurementTVP>
+  </tsml:point>
+</tsml:TimeseriesTVP>
