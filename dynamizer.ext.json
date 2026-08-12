@@ -1,0 +1,1117 @@
+{
+  "type": "CityJSONExtension",
+  "name": "Dynamizer",
+  "url": "https://raw.githubusercontent.com/JEDDOUB/cityjson-dynamizer-extension/refs/tags/v2.0.0/dynamizer.ext.json",
+  "version": "2.0.0",
+  "versionCityJSON": "2.0",
+  "description": "CityJSON 2.0 Extension for representing the supported concepts of the CityGML 3.0 Dynamizer module.",
+  "definitions": {
+    "Duration": {
+      "type": "string",
+      "pattern": "^-?P(?:\\d+Y(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?|\\d+M(?:\\d+(?:\\.\\d+)?S)?|\\d+(?:\\.\\d+)?S))?|\\d+M(?:\\d+D)?(?:T(?:\\d+H(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?|\\d+M(?:\\d+(?:\\.\\d+)?S)?|\\d+(?:\\.\\d+)?S))?|\\d+D(?:T(?:\\d+H(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?|\\d+M(?:\\d+(?:\\.\\d+)?S)?|\\d+(?:\\.\\d+)?S))?|T(?:\\d+H(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?|\\d+M(?:\\d+(?:\\.\\d+)?S)?|\\d+(?:\\.\\d+)?S))$",
+      "description": "Duration expressed using the XML Schema duration format, for example P1D for one day or PT30M for thirty minutes. When used as TimeseriesComponent.additionalGap, the value must not be negative."
+    },
+    "CodeValue": {
+      "description": "A coded value. It can be written as a simple string or as an object containing the code and an optional codeSpace that identifies its vocabulary.",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "minLength": 1
+            },
+            "codeSpace": {
+              "type": "string",
+              "format": "uri-reference"
+            }
+          },
+          "required": [
+            "code"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "SensorConnection": {
+      "type": "object",
+      "properties": {
+        "connectionType": {
+          "$ref": "#/definitions/CodeValue"
+        },
+        "observationProperty": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uom": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sensorID": {
+          "type": "string"
+        },
+        "sensorName": {
+          "type": "string"
+        },
+        "observationID": {
+          "type": "string"
+        },
+        "datastreamID": {
+          "type": "string"
+        },
+        "baseURL": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "authType": {
+          "$ref": "#/definitions/CodeValue"
+        },
+        "mqttServer": {
+          "type": "string"
+        },
+        "mqttTopic": {
+          "type": "string"
+        },
+        "linkToObservation": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "linkToSensorDescription": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "sensorLocation": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ID of the CityObject associated with the sensor location."
+        }
+      },
+      "required": [
+        "connectionType",
+        "observationProperty"
+      ],
+      "additionalProperties": false
+    },
+    "TimeValuePairInt": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "$ref": "#/definitions/TimePosition"
+        },
+        "intValue": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "timestamp",
+        "intValue"
+      ],
+      "additionalProperties": false
+    },
+    "TimeValuePairDouble": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "$ref": "#/definitions/TimePosition"
+        },
+        "doubleValue": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "timestamp",
+        "doubleValue"
+      ],
+      "additionalProperties": false
+    },
+    "TimeValuePairString": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "$ref": "#/definitions/TimePosition"
+        },
+        "stringValue": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "timestamp",
+        "stringValue"
+      ],
+      "additionalProperties": false
+    },
+    "TimeValuePairUri": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "$ref": "#/definitions/TimePosition"
+        },
+        "uriValue": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      },
+      "required": [
+        "timestamp",
+        "uriValue"
+      ],
+      "additionalProperties": false
+    },
+    "TimeValuePairBool": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "$ref": "#/definitions/TimePosition"
+        },
+        "boolValue": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "timestamp",
+        "boolValue"
+      ],
+      "additionalProperties": false
+    },
+    "TimeseriesComponent": {
+      "type": "object",
+      "properties": {
+        "repetitions": {
+          "type": "integer",
+          "description": "Number of times the referenced time series is repeated. An additional validation step should verify that the value is greater than zero."
+        },
+        "additionalGap": {
+          "$ref": "#/definitions/Duration"
+        },
+        "timeseries": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ID of the time-series CityObject used by this component. It must refer to a +GenericTimeseries, +CompositeTimeseries, +StandardFileTimeseries, or +TabulatedFileTimeseries object."
+        }
+      },
+      "required": [
+        "repetitions",
+        "timeseries"
+      ],
+      "additionalProperties": false
+    },
+    "Instant": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$",
+      "description": "Exact date and time expressed using RFC 3339, including either Z for UTC or a numerical time-zone offset such as +02:00."
+    },
+    "TimePosition": {
+      "description": "A position in time. An exact date and time is written as an RFC 3339 string. The object form is used when reduced precision or additional CityGML time information must be preserved.",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/Instant"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Time value written as a full date and time, a date, a year and month, or a year.",
+              "pattern": "^(?:\\d{4}|\\d{4}-\\d{2}|\\d{4}-\\d{2}-\\d{2}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2}))$"
+            },
+            "indeterminatePosition": {
+              "enum": [
+                "now",
+                "before",
+                "after",
+                "unknown"
+              ]
+            },
+            "frame": {
+              "type": "string",
+              "format": "uri-reference"
+            },
+            "calendarEraName": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "value"
+              ]
+            },
+            {
+              "required": [
+                "indeterminatePosition"
+              ]
+            }
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "extraAttributes": {
+    "Bridge": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BridgePart": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BridgeInstallation": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BridgeConstructiveElement": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BridgeRoom": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BridgeFurniture": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "Building": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BuildingPart": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BuildingInstallation": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BuildingConstructiveElement": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BuildingFurniture": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BuildingStorey": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BuildingRoom": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "BuildingUnit": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "CityFurniture": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "CityObjectGroup": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "GenericCityObject": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "LandUse": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "OtherConstruction": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "PlantCover": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "SolitaryVegetationObject": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "TINRelief": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "Road": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "Railway": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "TransportSquare": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "Waterway": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "Tunnel": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "TunnelPart": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "TunnelInstallation": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "TunnelConstructiveElement": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "TunnelHollowSpace": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "TunnelFurniture": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "WaterBody": {
+      "+dynamizer": {
+        "type": "array",
+        "description": "Optional list of +Dynamizer IDs associated with this CityObject. Each listed Dynamizer must use this CityObject ID as its target.",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    }
+  },
+  "extraCityObjects": {
+    "+Dynamizer": {
+      "allOf": [
+        {
+          "$ref": "cityobjects.schema.json#/_AbstractCityObject"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "+Dynamizer"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "target": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Required ID of the CityObject containing the property that changes over time. This is the main reference from the Dynamizer to the affected CityObject."
+                },
+                "attributeRef": {
+                  "type": "string",
+                  "pattern": "^/",
+                  "description": "RFC 6901 JSON Pointer identifying the property that changes inside the CityObject specified by target. For example, /attributes/temperature identifies the temperature attribute. An additional validation step must verify that the property exists."
+                },
+                "startTime": {
+                  "$ref": "#/definitions/TimePosition"
+                },
+                "endTime": {
+                  "$ref": "#/definitions/TimePosition"
+                },
+                "dynamicData": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Optional ID of the time-series CityObject that provides the changing values. It must refer to a +GenericTimeseries, +CompositeTimeseries, +StandardFileTimeseries, or +TabulatedFileTimeseries object."
+                },
+                "sensorConnection": {
+                  "$ref": "#/definitions/SensorConnection"
+                },
+                "creationDate": {
+                  "$ref": "#/definitions/TimePosition"
+                },
+                "terminationDate": {
+                  "$ref": "#/definitions/TimePosition"
+                },
+                "validFrom": {
+                  "$ref": "#/definitions/TimePosition"
+                },
+                "validTo": {
+                  "$ref": "#/definitions/TimePosition"
+                }
+              },
+              "required": [
+                "target",
+                "attributeRef"
+              ],
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "type",
+            "attributes"
+          ]
+        }
+      ]
+    },
+    "+GenericTimeseries": {
+      "allOf": [
+        {
+          "$ref": "cityobjects.schema.json#/_AbstractCityObject"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "+GenericTimeseries"
+            },
+            "attributes": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "firstTimestamp": {
+                      "$ref": "#/definitions/TimePosition"
+                    },
+                    "lastTimestamp": {
+                      "$ref": "#/definitions/TimePosition"
+                    },
+                    "observationProperty": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "uom": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueType": {
+                      "const": "int"
+                    },
+                    "timeValuePair": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/TimeValuePairInt"
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "observationProperty",
+                    "valueType",
+                    "timeValuePair"
+                  ],
+                  "additionalProperties": true
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "firstTimestamp": {
+                      "$ref": "#/definitions/TimePosition"
+                    },
+                    "lastTimestamp": {
+                      "$ref": "#/definitions/TimePosition"
+                    },
+                    "observationProperty": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "uom": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueType": {
+                      "const": "double"
+                    },
+                    "timeValuePair": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/TimeValuePairDouble"
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "observationProperty",
+                    "valueType",
+                    "timeValuePair"
+                  ],
+                  "additionalProperties": true
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "firstTimestamp": {
+                      "$ref": "#/definitions/TimePosition"
+                    },
+                    "lastTimestamp": {
+                      "$ref": "#/definitions/TimePosition"
+                    },
+                    "observationProperty": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "uom": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueType": {
+                      "const": "string"
+                    },
+                    "timeValuePair": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/TimeValuePairString"
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "observationProperty",
+                    "valueType",
+                    "timeValuePair"
+                  ],
+                  "additionalProperties": true
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "firstTimestamp": {
+                      "$ref": "#/definitions/TimePosition"
+                    },
+                    "lastTimestamp": {
+                      "$ref": "#/definitions/TimePosition"
+                    },
+                    "observationProperty": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "uom": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueType": {
+                      "const": "uri"
+                    },
+                    "timeValuePair": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/TimeValuePairUri"
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "observationProperty",
+                    "valueType",
+                    "timeValuePair"
+                  ],
+                  "additionalProperties": true
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "firstTimestamp": {
+                      "$ref": "#/definitions/TimePosition"
+                    },
+                    "lastTimestamp": {
+                      "$ref": "#/definitions/TimePosition"
+                    },
+                    "observationProperty": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "uom": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "valueType": {
+                      "const": "bool"
+                    },
+                    "timeValuePair": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/TimeValuePairBool"
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "observationProperty",
+                    "valueType",
+                    "timeValuePair"
+                  ],
+                  "additionalProperties": true
+                }
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "attributes"
+          ]
+        }
+      ]
+    },
+    "+CompositeTimeseries": {
+      "allOf": [
+        {
+          "$ref": "cityobjects.schema.json#/_AbstractCityObject"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "+CompositeTimeseries"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "firstTimestamp": {
+                  "$ref": "#/definitions/TimePosition"
+                },
+                "lastTimestamp": {
+                  "$ref": "#/definitions/TimePosition"
+                },
+                "component": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/TimeseriesComponent"
+                  },
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "component"
+              ],
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "type",
+            "attributes"
+          ]
+        }
+      ]
+    },
+    "+StandardFileTimeseries": {
+      "allOf": [
+        {
+          "$ref": "cityobjects.schema.json#/_AbstractCityObject"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "+StandardFileTimeseries"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "firstTimestamp": {
+                  "$ref": "#/definitions/TimePosition"
+                },
+                "lastTimestamp": {
+                  "$ref": "#/definitions/TimePosition"
+                },
+                "observationProperty": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uom": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fileLocation": {
+                  "type": "string",
+                  "format": "uri-reference"
+                },
+                "fileType": {
+                  "$ref": "#/definitions/CodeValue"
+                },
+                "mimeType": {
+                  "$ref": "#/definitions/CodeValue"
+                }
+              },
+              "required": [
+                "observationProperty",
+                "fileLocation",
+                "fileType"
+              ],
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "type",
+            "attributes"
+          ]
+        }
+      ]
+    },
+    "+TabulatedFileTimeseries": {
+      "allOf": [
+        {
+          "$ref": "cityobjects.schema.json#/_AbstractCityObject"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "+TabulatedFileTimeseries"
+            },
+            "attributes": {
+              "type": "object",
+              "properties": {
+                "firstTimestamp": {
+                  "$ref": "#/definitions/TimePosition"
+                },
+                "lastTimestamp": {
+                  "$ref": "#/definitions/TimePosition"
+                },
+                "observationProperty": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uom": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fileLocation": {
+                  "type": "string",
+                  "format": "uri-reference"
+                },
+                "fileType": {
+                  "$ref": "#/definitions/CodeValue"
+                },
+                "mimeType": {
+                  "$ref": "#/definitions/CodeValue"
+                },
+                "valueType": {
+                  "enum": [
+                    "int",
+                    "double",
+                    "string",
+                    "uri",
+                    "bool"
+                  ],
+                  "description": "Type of the values stored in the tabulated file. Version 2.0.0 supports integer, double, string, URI, and Boolean values. Changes to geometry, implicit geometry, and appearance are not currently supported."
+                },
+                "numberOfHeaderLines": {
+                  "type": "integer"
+                },
+                "fieldSeparator": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "decimalSymbol": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "idColumnNo": {
+                  "type": "integer"
+                },
+                "idColumnName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "idValue": {
+                  "type": "string"
+                },
+                "timeColumnNo": {
+                  "type": "integer"
+                },
+                "timeColumnName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "valueColumnNo": {
+                  "type": "integer"
+                },
+                "valueColumnName": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "observationProperty",
+                "fileLocation",
+                "fileType",
+                "valueType",
+                "fieldSeparator"
+              ],
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "type",
+            "attributes"
+          ]
+        }
+      ]
+    }
+  },
+  "extraRootProperties": {},
+  "extraSemanticSurfaces": {}
+}

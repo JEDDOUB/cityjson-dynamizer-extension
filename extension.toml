@@ -1,0 +1,6 @@
+name = "dynamizer"
+version = "2.0.0"
+title = "CityJSON Dynamizer Extension"
+description = "Initial mapping of the CityGML 3.0 Dynamizer module to CityJSON 2.0."
+cityjson_version = "2.0"
+schema = "dynamizer.ext.json"
