@@ -121,7 +121,7 @@ The included reference checker performs additional checks that JSON Schema canno
 
 Successful validation does not automatically prove that units are compatible, remote services are available, authentication is valid, or application-specific behaviour is correct. These aspects require additional semantic or operational checks.
 
-## Supporting scripts
+## Additional scripts
 
 The CityJSON examples are ready to use, and running the scripts is not required. The scripts are included to document how the examples were generated and to make the results reproducible.
 
