@@ -60,7 +60,6 @@ Geometry-, implicit-geometry-, and appearance-valued Dynamizers are not included
 ├── CITATION.cff
 ├── CONTRIBUTING.md
 ├── LICENSE
-├── VALIDATION_REPORT.md
 ├── extension.toml
 ├── docs/
 │   └── Dynamizer_Mapping_Specification_v2.0.0.pdf
