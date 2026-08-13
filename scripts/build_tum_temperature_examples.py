@@ -306,11 +306,6 @@ python apply_frost_temperature.py DEBY_LOD2_4959457.original.city.json building_
 
 The included `build_tum_temperature_examples.py` is the reproducible builder
 for all five encodings. Its source paths are defined at the top of the script.
-
-## Publication note
-
-The examples reference the immutable `v2.0.0` release URL. The repository must
-therefore publish tag `v2.0.0` before automatic remote schema retrieval is used.
 """
     (PACKAGE / "README.md").write_text(textwrap.dedent(readme), encoding="utf-8")
 
