@@ -22,3 +22,10 @@ cjval examples/01-generic-embedded-time-value-pairs.city.json -e dynamizer.ext.j
 ```
 
 Repeat the command with the other example filenames as required.
+
+## Sensor-location note
+
+In example 05, the FROST location at longitude 11.568095 and latitude
+48.149132 lies inside the published two-dimensional extent of the TUM building.
+This spatial match supports the use of the building ID as `sensorLocation`, but
+it does not prove the sensor's exact physical mounting point.

@@ -2,6 +2,5 @@ __pycache__/
 *.py[cod]
 *.log
 .DS_Store
-generated_tum_temperature_examples/
+generated_tum_temperature_examples*/
 building_frost_temperature.city.json
-

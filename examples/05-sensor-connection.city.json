@@ -1534,8 +1534,7 @@
           "linkToObservation": "https://gi3.gis.lrg.tum.de/frost/v1.1/Datastreams(1)/Observations",
           "linkToSensorDescription": "https://gi3.gis.lrg.tum.de/frost/v1.1/Sensors(5)",
           "sensorLocation": "DEBY_LOD2_4959457"
-        },
-        "associationNote": "FROST Location 1 (11.568095, 48.149132; TUM Room 0126, Arcisstr. 21) lies inside the published 2D extent of this building. This spatial match supports the association but does not, by itself, prove the sensor's exact physical mounting point."
+        }
       }
     }
   },

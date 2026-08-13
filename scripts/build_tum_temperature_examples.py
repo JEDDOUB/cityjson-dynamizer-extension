@@ -190,12 +190,6 @@ def build():
             "sensorLocation": BUILDING_ID,
         },
     )
-    data["CityObjects"]["dyn-temperature-sensor"]["attributes"]["associationNote"] = (
-        "FROST Location 1 (11.568095, 48.149132; TUM Room 0126, Arcisstr. 21) "
-        "lies inside the published 2D extent of this building. This spatial "
-        "match supports the association but does not, by itself, prove the "
-        "sensor's exact physical mounting point."
-    )
     write_example("05-sensor-connection.city.json", data)
 
     (DATA / "temperature.csv").write_text(
@@ -319,46 +313,6 @@ The examples reference the immutable `v2.0.0` release URL. The repository must
 therefore publish tag `v2.0.0` before automatic remote schema retrieval is used.
 """
     (PACKAGE / "README.md").write_text(textwrap.dedent(readme), encoding="utf-8")
-
-    validation_report = """# Validation report
-
-Generated: 2026-08-06
-
-## Passed checks
-
-- The extension validates against the official CityJSON 2.0 Extension meta-schema.
-- Every extension CityObject in all five examples validates against the bundled
-  Dynamizer Extension 2.0.0 schema and CityJSON 2.0.2 component schemas.
-- All examples preserve the source building's 278 vertices, geometry,
-  semantics, transform, metadata, and pre-existing attributes.
-- Every target, dynamic-data, component-timeseries, inverse-Dynamizer, and
-  sensor-location identifier resolves inside its CityJSON document.
-- The JSON Pointer `/attributes/temperature` resolves to a number.
-- The CSV contains four complete observations and the TimeseriesML document is
-  well-formed XML.
-- The archived original is byte-for-byte identical to the uploaded building.
-- Both Python scripts compile, and the ZIP archive passes its integrity test.
-
-## FROST association check
-
-FROST Thing 1 reports Location 1 at `11.568095, 48.149132`, named
-`TUM Room 0126` at Arcisstr. 21. The building extent in EPSG:25832 transforms
-approximately to longitude `11.567302–11.568723` and latitude
-`48.148224–48.149479`; the point lies inside that 2D extent.
-
-This supports use of the building as `sensorLocation`. Spatial containment is
-not proof of the exact mounting point, so the qualification is retained in the
-example's `associationNote`.
-
-## Independent command-line validation
-
-Run `cjvalext dynamizer.ext.json`, then the five `cjval ... -e`
-commands listed in the README. `cjval` was not available in the generation
-environment; equivalent Draft-07 schema checks were executed locally.
-"""
-    (PACKAGE / "VALIDATION_REPORT.md").write_text(
-        textwrap.dedent(validation_report), encoding="utf-8"
-    )
 
     shutil.copy2(SOURCE, PACKAGE / "DEBY_LOD2_4959457.original.city.json")
     shutil.copy2(ROOT / "scripts" / "apply_frost_temperature.py", PACKAGE / "apply_frost_temperature.py")

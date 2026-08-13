@@ -72,12 +72,6 @@ def enrich(data: dict) -> dict:
                 "linkToSensorDescription": f"{FROST_BASE}/Sensors(5)",
                 "sensorLocation": BUILDING_ID,
             },
-            "associationNote": (
-                "FROST Location 1 (11.568095, 48.149132; TUM Room 0126, "
-                "Arcisstr. 21) lies inside the published 2D extent of this building. "
-                "This spatial match supports the association but does not, by "
-                "itself, prove the sensor's exact physical mounting point."
-            ),
         },
     }
     return data
