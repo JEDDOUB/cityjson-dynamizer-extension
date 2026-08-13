@@ -62,7 +62,7 @@ Geometry-, implicit-geometry-, and appearance-valued Dynamizers are not included
 ├── LICENSE
 ├── extension.toml
 ├── docs/
-│   └── Dynamizer_Mapping_Specification_v2.0.0.pdf
+│   └── CityJSON_Dynamizer_Mapping_Specification_v2.0.0.pdf
 ├── examples/
 │   ├── README.md
 │   ├── 01-generic-embedded-time-value-pairs.city.json
